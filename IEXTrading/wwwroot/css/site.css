@@ -1,19 +1,32 @@
 ﻿body {
     background-color: #CFC493;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #006747;
+    /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #006747;*/
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    -webkit-text-size-adjust: 100%;
 }
 
 .nav-bar {
     background-color: #006747;
     color: #CFC493;
     font-size: x-large;
+    padding: 0 auto;
 }
 
-.nav-bar > a {
-    text-decoration: none;
-    color: inherit;
-}
+    .nav-bar .item {
+        display: inline-block;
+        margin: 0 63px;
+    }
+
+    .nav-bar > a {
+        text-decoration: none;
+        color: inherit;
+    }
 
 td {
     padding: 10px;
@@ -22,4 +35,43 @@ td {
 table {
     border-spacing: 10px;
     border-collapse: separate;
+}
+
+/*top*/
+.u-wrapper {
+    max-width: 1000px;
+    width: 95%;
+    margin: 0 auto;
+}
+
+.global_logo {
+    /*    float: left;*/
+    display: inline;
+    color: #10805e;
+    font: 400 1em/1.5em Georgia, serif;
+    width: 300px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.global_title {
+    float: right;
+    border-top: none;
+    /*    display: inline; */
+    width: 600px;
+}
+
+    .global_title h1 {
+        width: 600px;
+        align-content: right;
+        padding-top: 30px;
+        margin-bottom: 10px;
+        font-style: serif;
+    }
+
+.mainNav {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    display: block;
+    text-transform: uppercase;
 }

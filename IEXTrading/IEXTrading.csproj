@@ -17,4 +17,20 @@
     <Folder Include="wwwroot\images\NewFolder\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\images\bull-usf-full.png" />
+    <Content Remove="wwwroot\js\main.js" />
+    <Content Remove="wwwroot\js\Chart.Financial.js" />
+    <Content Remove="wwwroot\js\Chart.js" />
+    <Content Remove="wwwroot\js\moment.js" />
+    <Content Remove="wwwroot\js\utils.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\bull-usf-full.png" />
+    <None Include="wwwroot\js\main.js" />
+    <None Include="wwwroot\js\Chart.Financial.js" />
+    <None Include="wwwroot\js\Chart.js" />
+    <None Include="wwwroot\js\moment.js" />
+    <None Include="wwwroot\js\utils.js" />
+  </ItemGroup>
 </Project>
