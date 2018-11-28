@@ -9,6 +9,7 @@ using IEXTrading.Models;
 using IEXTrading.Models.ViewModel;
 using IEXTrading.DataAccess;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace MVCTemplate.Controllers
 {
@@ -57,6 +58,7 @@ namespace MVCTemplate.Controllers
         {
             //Set ViewBag variable first
             ViewBag.dbSuccessChart = 0;
+            ViewBag.dbSuccessRep = 0;
             List<Equity> equities = new List<Equity>();
             if (symbol != null)
             {
@@ -77,9 +79,11 @@ namespace MVCTemplate.Controllers
         public IActionResult Refresh(string tableToDel)
         {
             ClearTables(tableToDel);
-            Dictionary<string, int> tableCount = new Dictionary<string, int>();
-            tableCount.Add("Companies", dbContext.Companies.Count());
-            tableCount.Add("Charts", dbContext.Equities.Count());
+            Dictionary<string, int> tableCount = new Dictionary<string, int>
+            {
+                { "Companies", dbContext.Companies.Count() },
+                { "Charts", dbContext.Equities.Count() }
+            };
             return View(tableCount);
         }
 
@@ -161,7 +165,7 @@ namespace MVCTemplate.Controllers
 
             if (equities.Count == 0)
             {
-                return new CompaniesEquities(companies, null, "", "", "", 0, 0);
+                return new CompaniesEquities(companies, null, "", "", "", 0, 0, "", "", "", "");
             }
 
             Equity current = equities.Last();
@@ -170,8 +174,31 @@ namespace MVCTemplate.Controllers
             string volumes = string.Join(",", equities.Select(e => e.volume / 1000000)); //Divide vol by million
             float avgprice = equities.Average(e => e.high);
             double avgvol = equities.Average(e => e.volume) / 1000000; //Divide volume by million
-            return new CompaniesEquities(companies, equities.Last(), dates, prices, volumes, avgprice, avgvol);
+            string open = string.Join(",", equities.Select(e => e.open));
+            string high = string.Join(",", equities.Select(e => e.high));
+            string low = string.Join(",", equities.Select(e => e.low));
+            string close = string.Join(",", equities.Select(e => e.close));
+            return new CompaniesEquities(companies, equities.Last(), dates, prices, volumes, avgprice, avgvol, open, high, low, close);
         }
 
+
+
+        //public void ClearRecord(string recordToDel)
+        //{
+        //    if (recordToDel != null)
+        //    {
+        //        dbContext.Remove(dbContext.Repositories.Single(r => r.Symbol.Equals(recordToDel)));
+        //    }
+        //    dbContext.SaveChanges();
+        //}
+
+        //public IActionResult MyRepository(string recordToDel)
+        //{
+        //    //TODO: CLEAR RECORD
+        //    ClearRecord(recordToDel);
+        //    //the data post to page
+        //    List<Repository> repositories = dbContext.Repositories.ToList();
+        //    return View(repositories);
+        //}
     }
 }
