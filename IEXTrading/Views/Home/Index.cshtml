@@ -1,31 +1,52 @@
 ﻿@{
     ViewData["Title"] = "Index";
 }
-
-<h2>IEX Trading Application</h2>
+<h2>Our Stock Picking Strategy</h2>
 <hr />
-
 <div>
     <p>
-        This application let's you fetch trading data from IEX via their public <a href="https://iextrading.com/developer/">API</a>.
-        <br />
-        <br />
-        The <a asp-area="" asp-controller="Home" asp-action="Symbols">Symbols</a> tab fetches symbols data from the
-        <a href="https://iextrading.com/developer/docs/#reference-data">IEX Reference API </a> and displays the results.
-        This data can also be saved in the local database.
-        <br />
-        The <a asp-area="" asp-controller="Home" asp-action="Quote">Quote</a> tab let's you select a Company(symbol) and fetches a quote from
-        <a href="https://iextrading.com/developer/docs/#stocks">IEX Stock API</a>.
-        The quote can also be saved in the local database.
-        <br />
-        The <a asp-area="" asp-controller="Home" asp-action="Refresh">Refresh</a> tab let's you refresh the local database, that is, remove all its contents.
+        When we are doing stock selection, we have a lot of values to see.
+        In the assignment of our group, we chose to calculate the price-earnings ratio of
+        each stock as our stock selection strategy. First, let us see what is the
+        price-earnings ratio. PE ratio is the most commonly used indicator
+        to assess whether a stock price level is reasonable. The price is
+        divided by the stock price divided by the earnings per share.
+        PE can also be seen as a return on investment, in units of time.
+        For example, a company's stock price is 10 US dollars, and the annual
+        profit is 2 US dollars. The price-earnings ratio is 5, which is equivalent to earning
+        the principal in 5 years after you purchase the company's stock for 10 dollars.
+        When we consider PE as a key factor in our stock picking strategy, we need to focus on
+        whether the company's stock is profitable and whether the company's stock price really
+        has high value. Because the high value of the company's stock is not reflected in the price
+        of the stock, but reflected in the level of PE.<br />
     </p>
     <p>
-        Following learning objectives are fulfilled -
-        <ul>
-            <li>Connection to REST API.</li>
-            <li>Connection to database.</li>
-            <li>CRUD operations.</li>
-        </ul>
+        So how do we use PE for stock selection? First of all, we must avoid choosing
+        stocks with too high PE values, because this means that the time period for us
+        to recover costs will be very long. Secondly, we can't choose PE stocks that are
+        too low, because a company's PE is too low, indicating that the market is not
+        good for the company, and the stock has limited room for growth. Moreover,
+        low-PE stocks tend to be large-cap stocks, and the elasticity is very poor.
+        A large percentage of capital purchases cannot afford to increase the percentage
+        (such as financial stocks), which is suitable for avoiding risks and is not
+        suitable for pursuing high returns.<br />If we use PE as a key indicator of the
+        selection strategy, we should focus on the PE of other stocks in the same
+        industry, whether the PE of the stock we want to buy has an advantage;
+        moreover, we should also consider that the stock is in each historical period,
+        whether the PE is stable.<br />
+    </p>
+    <p>
+        Almost no one in the market does not pay attention to the price-to-earnings ratio
+        of stocks. This kind of measurement is very simple and intuitive. If the
+        P/E ratio indicator is used well, it will help investors to improve their
+        profits. This is the advantage of using P/E as an important indicator of
+        the stock picking strategy. However, P/E ratio also has shortcomings. For
+        example, the price-earnings ratio is directly related to the income. The higher
+        the income, the lower the price-earnings ratio, and the income of the
+        enterprise is unstable. For companies with very stable performance, it
+        is easy to use the current P/E ratio. For companies with unstable performance,
+        the current P/E ratio is extremely unreliable. The current low P/E ratio does
+        not necessarily mean underestimation. The high current P/E ratio does not
+        necessarily mean overestimation.
     </p>
 </div>

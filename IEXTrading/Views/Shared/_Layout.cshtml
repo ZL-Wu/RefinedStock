@@ -7,24 +7,48 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <script type="text/javascript" src="~/js/Chart.min.js"></script>
     <script type="text/javascript" src="~/lib/chartjs-plugin-annotation-master/chartjs-plugin-annotation.min.js"></script>
-    <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/js/moment.js"></script>
+    <script type="text/javascript" src="~/js/Chart.js"></script>
+    <script type="text/javascript" src="~/js/Chart.Financial.js"></script>
+    <script type="text/javascript" src="~/js/utils.js"></script>
+    <script type="text/javascript" src="~/js/main.js"></script>
 </head>
 <body>
-    <nav>
-        <div class="nav-bar">
-            <a asp-area="" asp-controller="Home" asp-action="Index">Home </a><text> | </text>
-            <a asp-area="" asp-controller="Home" asp-action="Symbols">Symbols </a><text> | </text>
-            <a asp-area="" asp-controller="Home" asp-action="Chart">Chart </a><text> | </text>
-            <a asp-area="" asp-controller="Home" asp-action="Refresh">Refresh </a><text> | </text>
+    <!-- top -->
+    <div class="global u-wrapper ">
+        <!-- top left -->
+        <h1 class="global_logo">\<a href="/"><img src="~/images/bull-usf-full.png" alt="University of South Florida" /></a></h1>
+        <!-- top right -->
+        <div class="global_title">
+            <h1>Stocks Picking Recommendation Web App</h1>
         </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>ISDS, Muma College of Business, University of South Florida</p>
-        </footer>
+    </div>
+    <div style="clear: both;"></div>
+
+    <!-- Navigation -->
+    <div class="u-wrapper">
+        <nav class=" mainNav mainNav--reverse " role="navigation">
+            <div class="nav-bar">
+                <a asp-area="" asp-controller="Home" asp-action="Index"><span>Home</span> </a><text> | </text>
+                <a asp-area="" asp-controller="Home" asp-action="Symbols">Symbols </a><text> | </text>
+                <a asp-area="" asp-controller="Home" asp-action="Chart">Chart </a><text> | </text>
+                <a asp-area="" asp-controller="Home" asp-action="MyRepository">My Repository </a><text> | </text>
+                <a asp-area="" asp-controller="Home" asp-action="Refresh">Refresh </a>
+            </div>
+        </nav>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer style="text-align:center;">
+                <p>
+                    Distributed Information System Course Group --- <br />
+                    Mingxiao Jing, Zhenglong Wu, Binrui Yang<br />
+                    <a asp-controller="Home" asp-action="Reflection">Self Reflection</a>
+                </p>
+            </footer>
+        </div>
     </div>
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>

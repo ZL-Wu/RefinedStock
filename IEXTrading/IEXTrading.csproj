@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\NewFolder\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\images\bull-usf-full.png" />
     <Content Remove="wwwroot\js\main.js" />
     <Content Remove="wwwroot\js\Chart.Financial.js" />
