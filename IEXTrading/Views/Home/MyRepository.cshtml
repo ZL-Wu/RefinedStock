@@ -1,0 +1,48 @@
+﻿@model IEnumerable<IEXTrading.Models.Repository>
+@{
+    ViewData["Title"] = "My Repository";
+}
+<h2>My Repository</h2>
+<hr />
+<p>These are all stockes you choose.</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Symbel</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>PE Ratio</th>
+        </tr>
+    </thead>
+    <tbody>
+        @*<tr>
+                <td>
+                    All
+                </td>
+                <td>
+                    @Model.Values.Sum()
+                </td>
+                <td>
+                    <a asp-controller="Home" asp-action="Refresh" asp-route-tableToDel="all">Refresh</a>
+                </td>
+            </tr>*@
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Symbol)</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.High)</td>
+                <td>@Html.DisplayFor(modelItem => item.Volume)</td>
+                <td>@Html.DisplayFor(modelItem => item.peRatio)</td>
+                <td>
+                    <a asp-controller="Home" asp-action="MyRepository" asp-route-recordToDel=@item.Symbol>Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

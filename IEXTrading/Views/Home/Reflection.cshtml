@@ -1,0 +1,63 @@
+﻿<h1> Self Reflection </h1>
+<br />
+<p>
+    This assignment is much more challengable than each single one before.
+    <b>
+        MVC applications, database connectivity, cloud deployment, entity framework,
+        and chart.js
+    </b>, there are so many unfamiliar knowledge influx together suddenly.
+    However, we did it, even though our group members are all Programming Beginners and we are
+    not very satisfied with the result of this assignment due to we spent a lot of time to
+    study MVC, Database and JavaScript. We still feel very confident and proud after
+    complete this Wed App initially. This is a practical training
+</p>
+<h2>What we did?</h2>
+<p>
+    Our goal is to simply develop some new features, such as Stocks Recommendation or Creating a new
+    connecting database to be a repository to store the stocks user choose, based on the Professor's
+    Entity Framework Template. These are what we did:
+</p>
+<li>
+    At first, we developed some models in order to creating and connecting with a SQL database as a
+    repository for users to pick out stocks and store the stocks' infomation dynamicaly.
+</li>
+<li>
+    Secondly, we improved some chart, and tried to depict K liner graph in the canvas for every
+    company we choose randomly in the "Chart" Page.
+</li>
+<li>
+    Then, we began to study Finance and tried to design some appropriate models, Object-oriented
+    Programming, to organize information efficiently for preparation of strategy development.
+</li>
+<h2>What we learned?</h2>
+<p>
+    In the strategy development, we faced a lot of problems. The first one is API, according to our
+    research, we gained many information which are significant to stock price, such as market interest
+    rate, time effect, periodic effect, goverment regulation in macro part, also PE ratio, EPS, and
+    corparation financial report in micro part, Some data can be obtained through the API, some other can't.
+    We considered to use ROIC(Return in Invest Capital) to help user do their decision, but we have got
+    to give up, since lacking of dependent data. Then we focused on CAPM(Capital Asset Pricing Model)
+    and want to build a linear or non-linear model with the help of it to predic the price of some certain
+    stocks, thus we could find out the undervalued stocks. We are still developing this algorithm so far.
+    In the Web App current version, we use PE and financial data to filter out 5 high quality stock,
+    which is suitable for short-term investors. This is a good opportunity for us to practice Programming
+    skills and traing our data analysis sense. This is an assignment that needs to search a lot of materials,
+    so we were always meeting to discuss this project without using a lot of GitHub. After this assignment,
+    we learned that the practical questions are more complicated. Therefore, using programming skills to
+    quickly solve real-life problem will be the main direction we will foucus on in the future.
+</p>
+<h2>The defect of the Web App</h2>
+<p>
+    There are still some defect that we didn't solve successfully yet. And we tried to fixed them in next version.
+    These are some small bugs in the Web App:
+</p>
+<li>
+    There are 8570 companies totally in that stock markets. When we plan to sort them depend on their PE ratio,
+    the algorithm we programmed didn't complete this even for 5 minutes since we called several API and loop twice.
+    We know that this is not feasible, in order to decrease time, We have to decrease the sample volume. But it still
+    cost us 12 seconds when operate this, this is also why it shows slowly when we open the "Symbol" page.
+</li>
+<li>
+    We want to find a method to load our huge resources in the back of the program without waiting for users'
+    activation by click, then we can save a lot of time. But this is also the method we are still learning and developing
+</li>

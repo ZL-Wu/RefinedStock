@@ -1,12 +1,9 @@
 ﻿@model IEXTrading.Models.ViewModel.CompaniesEquities
-
 @{
-    ViewData["Title"] = "Quote";
+    ViewData["Title"] = "Chart Show";
 }
-
 <h2>Chart</h2>
 <hr />
-
 <form asp-controller="Home" asp-action="Chart" method="get">
     <select name="symbol">
         @foreach (var company in Model.Companies)
@@ -24,64 +21,50 @@
         <tbody>
             <tr>
                 <td>
+                    <div>
+                        <canvas id="myChart" height="300" width="600"></canvas>
+                    </div>
+                </td>
+                <td>
                     Current Chart Data
                     <table>
                         <tr>
-                            <td>
-                                Symbol
-                            </td>
-                            <td>
-                                @equity.symbol
-                            </td>
+                            <td>Symbol</td>
+                            <td>@equity.symbol</td>
                         </tr>
                         <tr>
-                            <td>
-                                Open
-                            </td>
-                            <td>
-                                @equity.open
-                            </td>
+                            <td>Open</td>
+                            <td>@equity.open</td>
                         </tr>
                         <tr>
-                            <td>
-                                High
-                            </td>
-                            <td>
-                                @equity.high
-                            </td>
+                            <td>High</td>
+                            <td>@equity.high</td>
                         </tr>
                         <tr>
-                            <td>
-                                Close
-                            </td>
-                            <td>
-                                @equity.close
-                            </td>
+                            <td>Close</td>
+                            <td>@equity.close</td>
                         </tr>
                         <tr>
-                            <td>
-                                Volume
-                            </td>
-                            <td>
-                                @equity.volume
-                            </td>
+                            <td>Volume</td>
+                            <td>@equity.volume</td>
                         </tr>
                     </table>
                 </td>
                 <td>
-                    <div>
-                        <canvas id="myChart" height="500" width="800"></canvas>
-                    </div>
-                </td>
-                <td>
-                    <a asp-controller="Home" asp-action="SaveCharts" asp-route-symbol="@Model.Current.symbol"><img src="~/images/button_save-data.png" /></a>
+                    <a asp-controller="Home" asp-action="SaveCharts" asp-route-symbol="@Model.Current.symbol"><img src="~/images/button_save-data.png" /></a> <br /><br />
+                    <a asp-controller="Home" asp-action="AddRepository" asp-route-symbol="@Model.Current.symbol">Add To My Repository</a> <br /><br />
+                    <a asp-controller="Home" asp-action="StockRecommendation">Stock Recommendation</a>
                 </td>
             </tr>
         </tbody>
     </table>
+    <canvas id="StockChart" style="background-color:black;"></canvas>
 }
-
 <script>
-    getChart("@Model.Dates", "@Model.Prices", "@Model.Volumes", @Model.AvgPrice, @Model.AvgVolume);
-    alertDbSave(@ViewBag.dbSuccessChart);
+        getChart("@Model.Dates", "@Model.Prices", "@Model.Volumes", @Model.AvgPrice, @Model.AvgVolume);
+        alertDbSave(@ViewBag.dbSuccessChart);
+        alertRepSave(@ViewBag.dbSuccessRep);
+</script>
+<script>
+        getStockChart("@Model.Open", "@Model.High", "@Model.Low", "@Model.Close", "@Model.Dates");
 </script>
