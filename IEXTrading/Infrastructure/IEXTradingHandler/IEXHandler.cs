@@ -77,5 +77,62 @@ namespace IEXTrading.Infrastructure.IEXTradingHandler
 
             return Equities;
         }
+
+        public Quote GetQuote(string symbol)
+        {
+            string IEXTrading_API_PATH = BASE_URL + "stock/" + symbol + "/quote";
+            string quotestr = "";
+            Quote Quotes = new Quote();
+            httpClient.BaseAddress = new Uri(IEXTrading_API_PATH);
+            HttpResponseMessage response = httpClient.GetAsync(IEXTrading_API_PATH).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
+            {
+                quotestr = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+
+            if (!quotestr.Equals(""))
+            {
+                //Only need two values in this case
+                string[] q = quotestr.Split(',');
+                string newQ = q[0] + ',' + q[37] + '}';
+                if (newQ.Split(':')[2] != "null}")
+                {
+                    Quotes = JsonConvert.DeserializeObject<Quote>(newQ);
+                }
+            }
+            return Quotes;
+        }
+
+
+        public Financial getFinancial(string symbol)
+        {
+            string IEXTrading_API_PATH = BASE_URL + "/stock/" + symbol + "/financials?period=quarter";
+            Financial financial = new Financial();
+            string financialDetails = "";
+            httpClient.BaseAddress = new Uri(IEXTrading_API_PATH);
+            HttpResponseMessage response = httpClient.GetAsync(IEXTrading_API_PATH).GetAwaiter().GetResult();
+            if (response.IsSuccessStatusCode)
+            {
+                financialDetails = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
+            if (!financialDetails.Equals(""))
+            {
+                char[] delimiters = new char[] { '\"', '\n', ':', ',' };
+                string[] f = financialDetails.Split(delimiters);
+                string s = f[4];
+                string o = f[26];
+                string t = f[54];
+                string c = f[86];
+                if (o == "null") { o = "-1000000"; }
+                if (t == "null") { t = "-1000000"; }
+                if (c == "null") { t = "-1000000"; }
+
+                financial.symbol = s;
+                financial.operatingRevenue = o;
+                financial.totalAssets = t;
+                financial.cashFlow = c;
+            }
+            return financial;
+        }
     }
 }
