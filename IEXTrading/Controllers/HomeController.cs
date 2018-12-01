@@ -34,15 +34,10 @@ namespace MVCTemplate.Controllers
         ****/
         public IActionResult Symbols()
         {
-            //Set ViewBag variable first
-            ViewBag.dbSucessComp = 0;
-            IEXHandler webHandler = new IEXHandler();
-            List<Company> companies = webHandler.GetSymbols();
-
-            //Save comapnies in TempData
-            TempData["Companies"] = JsonConvert.SerializeObject(companies);
-
-            return View(companies);
+            List<Company> companies = dbContext.Companies.ToList();
+            List<Equity> equities = new List<Equity>();
+            CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
+            return View(companiesEquities);
         }
 
         /****
@@ -100,7 +95,9 @@ namespace MVCTemplate.Controllers
             }
             dbContext.SaveChanges();
             ViewBag.dbSuccessComp = 1;
-            return View("Symbols", companies);
+            List<Equity> equities = new List<Equity>();
+            CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
+            return View("Symbols", companiesEquities);
         }
 
         /****
@@ -180,6 +177,21 @@ namespace MVCTemplate.Controllers
 
 
 
+
+        //Update the companies
+        public IActionResult UpdateStocks() 
+        {
+            //Set ViewBag variable first
+            ViewBag.dbSucessComp = 0;
+            IEXHandler webHandler = new IEXHandler();
+            List<Company> companies = webHandler.GetSymbols();
+
+            //Save comapnies in TempData
+            TempData["Companies"] = JsonConvert.SerializeObject(companies);
+            List<Equity> equities = new List<Equity>();
+            CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
+            return View("Symbols", companiesEquities);
+        }
 
         public IActionResult Reflection()
         {
@@ -269,6 +281,24 @@ namespace MVCTemplate.Controllers
             dbContext.SaveChanges();
 
             return View("MyRepository", dbContext.Repositories.ToList());
+        }
+
+        public IActionResult Details(string symbol)
+        {
+            //Set ViewBag variable first
+            ViewBag.dbSuccessChart = 0;
+            ViewBag.dbSuccessRep = 0;
+            List<Equity> equities = new List<Equity>();
+            if (symbol != null)
+            {
+                IEXHandler webHandler = new IEXHandler();
+                equities = webHandler.GetChart(symbol);
+                equities = equities.OrderBy(c => c.date).ToList(); //Make sure the data is in ascending order of date.
+            }
+
+            CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
+
+            return View("Symbols",companiesEquities);
         }
     }
 }
