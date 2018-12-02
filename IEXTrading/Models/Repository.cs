@@ -17,13 +17,13 @@ namespace IEXTrading.Models
         public Repository()
         { }
 
-        public Repository(string symbol, string name, string date, string type, float high, int volume, float peratio)
+        public Repository(string symbol, string name, string date, string type, float close, int volume, float peratio)
         {
             Symbol = symbol;
             Name = name;
             Date = date;
             Type = type;
-            High = high;
+            High = close;
             Volume = volume;
             peRatio = peratio;
         }

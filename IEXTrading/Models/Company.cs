@@ -14,5 +14,6 @@ namespace IEXTrading.Models
         public string iexId { get; set; }
         public List<Equity> Equities {get; set; }
         public float peRatio { get; set; }
+        public float BetaRisk { get; set; }
     }
 }

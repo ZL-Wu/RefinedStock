@@ -1,10 +1,10 @@
 ﻿@model IEXTrading.Models.ViewModel.CompaniesEquities
 @{
-    ViewData["Title"] = "Chart Show";
+    ViewData["Title"] = "Stock Recommendation";
 }
-<h2>Stock Charts</h2>
+<h2>Stock Recommendation</h2>
 <hr />
-<form asp-controller="Home" asp-action="Chart" method="get">
+@*<form asp-controller="Home" asp-action="Chart" method="get">
     <select name="symbol">
         @foreach (var company in Model.Companies)
         {
@@ -12,7 +12,54 @@
         }
     </select>
     <input type="submit" value="Get Chart" />
-</form>
+</form>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>PE Ratio</th>
+            <th>Risk Beta</th>
+        </tr>
+    </thead>
+
+    <tbody id="show">
+        @foreach (var item in Model.Companies)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.symbol)
+                </td>
+                <td style="width:380px">
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.peRatio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BetaRisk)
+                </td>
+                <td>
+                    <a asp-controller="Home" asp-action="AddRepository" asp-route-symbol=@item.symbol>Add To My Repository</a>
+                </td>
+                @*<td>
+                    <a asp-controller="Home" asp-action="CompareCharts" asp-route-symbol=@item.symbol>Time series Chart</a>
+                </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
 @if (Model.Current != null)
 {
     var equity = Model.Current;

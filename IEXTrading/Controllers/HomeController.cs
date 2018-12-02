@@ -63,38 +63,40 @@ namespace MVCTemplate.Controllers
             return View(companiesEquities);
         }
 
-        /****
-         * The Refresh action calls the ClearTables method to delete records from a or all tables.
-         * Count of current records for each table is passed to the Refresh View.
-        ****/
-        public IActionResult Refresh(string tableToDel)
-        {
-            ClearTables(tableToDel);
-            Dictionary<string, int> tableCount = new Dictionary<string, int>
-            {
-                { "Companies", dbContext.Companies.Count() },
-                { "Charts", dbContext.Equities.Count() }
-            };
-            return View(tableCount);
-        }
+        ///****
+        // * The Refresh action calls the ClearTables method to delete records from a or all tables.
+        // * Count of current records for each table is passed to the Refresh View.
+        //****/
+        //public IActionResult Refresh(string tableToDel)
+        //{
+        //    ClearTables(tableToDel);
+        //    Dictionary<string, int> tableCount = new Dictionary<string, int>
+        //    {
+        //        { "Companies", dbContext.Companies.Count() },
+        //        { "Charts", dbContext.Equities.Count() }
+        //    };
+        //    return View(tableCount);
+        //}
 
         /****
          * Saves the Symbols in database.
         ****/
         public IActionResult PopulateSymbols()
         {
+            ClearTables("all");
             List<Company> companies = JsonConvert.DeserializeObject<List<Company>>(TempData["Companies"].ToString());
             foreach (Company company in companies)
             {
                 //Database will give PK constraint violation error when trying to insert record with existing PK.
                 //So add company only if it doesnt exist, check existence using symbol (PK)
-                if (dbContext.Companies.Where(c => c.symbol.Equals(company.symbol)).Count() == 0)
-                {
+                //if (dbContext.Companies.Where(c => c.symbol.Equals(company.symbol)).Count() == 0)
+                //{
                     dbContext.Companies.Add(company);
-                }
+                //}
             }
             dbContext.SaveChanges();
             ViewBag.dbSuccessComp = 1;
+
             List<Equity> equities = new List<Equity>();
             CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
             return View("Symbols", companiesEquities);
@@ -174,8 +176,26 @@ namespace MVCTemplate.Controllers
             return new CompaniesEquities(companies, equities.Last(), dates, prices, volumes, avgprice, avgvol, open, high, low, close);
         }
 
+        //TODO: Unfinished!!!
+        public Recommendation GetRecommendationModel(List<Company> companies)
+        {
+            List<string> symbols = new List<string>();
+            List<Equity> equities = new List<Equity>();
+            Dictionary<string, float[]> chart = new Dictionary<string, float[]>();
+            Dictionary<string, string[]> date = new Dictionary<string, string[]>();
+            foreach (Company company in companies)
+                symbols.Add(company.symbol);
+            foreach (string symbol in symbols)
+            {
+                IEXHandler webHandler = new IEXHandler();
+                equities = webHandler.GetChart(symbol);
+                equities = equities.OrderBy(c => c.date).ToList();
 
+                //chart.Add(symbol, equities.)
+            }
 
+            return new Recommendation(companies, chart, date);
+        }
 
 
         //Update the companies
@@ -185,15 +205,39 @@ namespace MVCTemplate.Controllers
             ViewBag.dbSucessComp = 0;
             IEXHandler webHandler = new IEXHandler();
             List<Company> companies = webHandler.GetSymbols();
+            foreach (Company company in companies)
+            {
+                IEXHandler webHandler2 = new IEXHandler();
+                Quote quote = webHandler2.GetQuote(company.symbol);
+                if (quote.peRatio > 0)
+                {
+                    company.peRatio = quote.peRatio;
+                }
+                else
+                {
+                    company.peRatio = 10000;
+                }
+            }
+            //Only pick out top 20 companies which has lower PE ratio
+            companies = companies.OrderBy(c => c.peRatio).ToList().GetRange(0, 20);
+            foreach(Company company in companies)
+            {
+                float BetaValue = GetBetaValue(company.symbol);
+                company.BetaRisk = BetaValue;
+            }
 
             //Save comapnies in TempData
             TempData["Companies"] = JsonConvert.SerializeObject(companies);
-            List<Equity> equities = new List<Equity>();
-            CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
+
+            CompaniesEquities companiesEquities = new CompaniesEquities(companies, null, "", "", "", 0, 0, "", "", "", "");
             return View("Symbols", companiesEquities);
         }
 
         public IActionResult Reflection()
+        {
+            return View();
+        }
+        public IActionResult Recommendation()
         {
             return View();
         }
@@ -227,62 +271,22 @@ namespace MVCTemplate.Controllers
                 dbContext.SaveChanges();
             }
 
-            CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
-            return View("Chart", companiesEquities);
+            List<Repository> repositories = dbContext.Repositories.ToList();
+            return View("MyRepository", repositories);
+            //CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
+            //return View("Chart", companiesEquities);
         }
 
         public IActionResult MyRepository(string recordToDel)
         {
-            //TODO: CLEAR RECORD
+            //CLEAR RECORD
             ClearRecord(recordToDel);
             //the data post to page
             List<Repository> repositories = dbContext.Repositories.ToList();
             return View(repositories);
         }
 
-        public IActionResult StockRecommendation()
-        {
-            dbContext.Repositories.RemoveRange(dbContext.Repositories);
-            //TODO: STOCK PICKING STRATEGY:
-            List<Company> companies = dbContext.Companies.ToList();
-            List<Financial> financials = new List<Financial>();
-            foreach (Company company in companies)
-            {
-                IEXHandler webHandler = new IEXHandler();
-                Financial financial = webHandler.getFinancial(company.symbol);
-                financials.Add(financial);
-            }
-
-            //Filt out good stocks depend on the financial report data
-            financials = financials.OrderByDescending(f => f.operatingRevenue).ToList().GetRange(0, 15);
-            financials = financials.OrderByDescending(f => f.totalAssets).ToList().GetRange(0, 10);
-            financials = financials.OrderByDescending(f => f.cashFlow).ToList().GetRange(0, 5);
-
-            foreach (Financial finance in financials)
-            {
-                foreach (Company company in companies)
-                {
-                    if (finance.symbol == company.symbol)
-                    {
-                        IEXHandler webHandler = new IEXHandler();
-                        List<Equity> equities = webHandler.GetChart(company.symbol);
-                        string Name = company.name;
-                        string Type = company.type;
-                        string Date = equities.Last().date;
-                        float AvgPrice = equities.Average(e => e.high);
-                        int Volume = equities.Last().volume;
-                        float peRatio = company.peRatio;
-
-                        Repository repository = new Repository(company.symbol, Name, Date, Type, AvgPrice, Volume, peRatio);
-                        dbContext.Repositories.Add(repository);
-                    }
-                }
-            }
-            dbContext.SaveChanges();
-
-            return View("MyRepository", dbContext.Repositories.ToList());
-        }
-
+        //Get the K line chart of a certain stock
         public IActionResult Details(string symbol)
         {
             //Set ViewBag variable first
@@ -297,8 +301,119 @@ namespace MVCTemplate.Controllers
             }
 
             CompaniesEquities companiesEquities = getCompaniesEquitiesModel(equities);
-
             return View("Symbols",companiesEquities);
+        }
+
+        //public IActionResult CompareCharts(string symbol)
+        //{
+        //    List<Equity> equities = new List<Equity>();
+        //    if (symbol != null)
+        //    {
+        //        IEXHandler webHandler = new IEXHandler();
+        //        equities = webHandler.GetChart(symbol);
+        //        equities = equities.OrderBy(c => c.date).ToList(); //Make sure the data is in ascending order of date.
+        //    }
+
+        //    //TODO: TEST WILL DELETE LATER!
+        //    //Equity current = equities.Last();
+        //    //string dates = string.Join(",", equities.Select(e => e.date));
+        //    //string prices = string.Join(",", equities.Select(e => e.high));
+        //    //string volumes = string.Join(",", equities.Select(e => e.volume / 1000000)); //Divide vol by million
+        //    //float avgprice = equities.Average(e => e.high);
+        //    //double avgvol = equities.Average(e => e.volume) / 1000000; //Divide volume by million
+        //    //string open = string.Join(",", equities.Select(e => e.open));
+        //    //string high = string.Join(",", equities.Select(e => e.high));
+        //    //string low = string.Join(",", equities.Select(e => e.low));
+        //    //string close = string.Join(",", equities.Select(e => e.close));
+        //    //CompaniesEquities companiesEquities = new CompaniesEquities(newCompanies, equities.Last(), dates, prices, volumes, avgprice, avgvol, open, high, low, close);
+
+        //    return View("Recommendation", companiesEquities);
+        //}
+
+        public IActionResult StockRecommendation()
+        {
+            //dbContext.Repositories.RemoveRange(dbContext.Repositories);
+            //STOCK PICKING STRATEGY:
+            List<Company> companies = dbContext.Companies.ToList();
+            List<Financial> financials = new List<Financial>();
+            foreach (Company company in companies)
+            {
+                IEXHandler webHandler = new IEXHandler();
+                Financial financial = webHandler.getFinancial(company.symbol);
+                financials.Add(financial);
+            }
+
+            //Filt out good stocks depend on the financial report data
+            financials = financials.OrderByDescending(f => f.operatingRevenue).ToList().GetRange(0, 15);
+            financials = financials.OrderByDescending(f => f.totalAssets).ToList().GetRange(0, 10);
+            financials = financials.OrderByDescending(f => f.cashFlow).ToList().GetRange(0, 5);
+
+            List<Company> newCompanies = new List<Company>();
+            foreach (Financial finance in financials)
+            {
+                foreach (Company company in companies)
+                {
+                    if (finance.symbol == company.symbol)
+                        newCompanies.Add(company);
+                }
+            }
+
+            CompaniesEquities companiesEquities = new CompaniesEquities(newCompanies, null, "", "", "", 0, 0, "", "", "", "");
+            return View("Recommendation", companiesEquities);
+        }
+
+        //Second Recommendation algorithm (CAPM)
+        public IActionResult CAPMrecommendation()
+        {
+            List<Company> Companies = dbContext.Companies.ToList();
+            Companies = Companies.OrderBy(c => c.BetaRisk).ToList().GetRange(0, 5);
+            CompaniesEquities companiesEquities = new CompaniesEquities(Companies, null, "", "", "", 0, 0, "", "", "", "");
+            return View("Recommendation", companiesEquities);
+        }
+
+        //Get Asset Return from a certain stock
+        //Market Return from S&P 500 is when symbol equals to "SPY"
+        public List<float> GetAssetReturns(string symbol)
+        {
+            //Get Stocks 1y data
+            IEXHandler webHandler = new IEXHandler();
+            List<Equity> equites = webHandler.GetChart(symbol);
+
+            //Calulate market return based on each day
+            List<float> assetReturns = new List<float>();
+            foreach (Equity equity in equites)
+            {
+                float Areturn = (equity.close - equity.open) / equity.open;
+                assetReturns.Add(Areturn);
+            }
+            return assetReturns;
+        }
+
+        //Get Beta Value of a certain stock
+        //Use linear regression model
+        public float GetBetaValue(string symbol)
+        {
+            //Get Group Y: Estimated Stock Return 
+            List<float> EstStockReturn = GetAssetReturns(symbol);
+            //Get Group X: Estimated Market Return
+            List<float> EstMarketReturn = GetAssetReturns("SPY");
+            //Calculate Beta Value of this stock
+            int N = EstStockReturn.Count();
+            float XYSum = 0f;
+            float XSum = 0f;
+            float YSum = 0f;
+            float X2Sum = 0f;
+
+            for(int i = 0; i < N; i++)
+            {
+                XYSum += EstMarketReturn[i] * EstStockReturn[i];
+                XSum += EstMarketReturn[i];
+                YSum += EstStockReturn[i];
+                X2Sum += EstMarketReturn[i] * EstMarketReturn[i];
+            }
+
+            float Beta = (N * XYSum - XSum * YSum) / (N * X2Sum - XSum * XSum);
+            return Beta;
         }
     }
 }
