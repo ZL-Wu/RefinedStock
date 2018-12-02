@@ -1,5 +1,4 @@
-﻿<h1> Self Reflection </h1>
-<br />
+﻿<h1> First Self Reflection (Nov 11th 2018)</h1>
 <p>
     This assignment is much more challengable than each single one before.
     <b>
@@ -9,7 +8,7 @@
     However, we did it, even though our group members are all Programming Beginners and we are
     not very satisfied with the result of this assignment due to we spent a lot of time to
     study MVC, Database and JavaScript. We still feel very confident and proud after
-    complete this Wed App initially. This is a practical training
+    complete this Wed App initially. This is a practical training.
 </p>
 <h2>What we did?</h2>
 <p>
@@ -17,18 +16,21 @@
     connecting database to be a repository to store the stocks user choose, based on the Professor's
     Entity Framework Template. These are what we did:
 </p>
-<li>
-    At first, we developed some models in order to creating and connecting with a SQL database as a
-    repository for users to pick out stocks and store the stocks' infomation dynamicaly.
-</li>
-<li>
-    Secondly, we improved some chart, and tried to depict K liner graph in the canvas for every
-    company we choose randomly in the "Chart" Page.
-</li>
-<li>
-    Then, we began to study Finance and tried to design some appropriate models, Object-oriented
-    Programming, to organize information efficiently for preparation of strategy development.
-</li>
+<ul>
+    <li>
+        At first, we developed some models in order to creating and connecting with a SQL database as a
+        repository for users to pick out stocks and store the stocks' infomation dynamicaly.
+    </li>
+    <li>
+        Secondly, we improved some chart, and tried to depict K liner graph in the canvas for every
+        company we choose randomly in the "Chart" Page.
+    </li>
+    <li>
+        Then, we began to study Finance and tried to design some appropriate models, Object-oriented
+        Programming, to organize information efficiently for preparation of strategy development.
+    </li>
+</ul>
+
 <h2>What we learned?</h2>
 <p>
     In the strategy development, we faced a lot of problems. The first one is API, according to our
@@ -51,13 +53,82 @@
     There are still some defect that we didn't solve successfully yet. And we tried to fixed them in next version.
     These are some small bugs in the Web App:
 </p>
-<li>
-    There are 8570 companies totally in that stock markets. When we plan to sort them depend on their PE ratio,
-    the algorithm we programmed didn't complete this even for 5 minutes since we called several API and loop twice.
-    We know that this is not feasible, in order to decrease time, We have to decrease the sample volume. But it still
-    cost us 12 seconds when operate this, this is also why it shows slowly when we open the "Symbol" page.
-</li>
-<li>
-    We want to find a method to load our huge resources in the back of the program without waiting for users'
-    activation by click, then we can save a lot of time. But this is also the method we are still learning and developing
-</li>
+<ul>
+    <li>
+        There are 8570 companies totally in that stock markets. When we plan to sort them depend on their PE ratio,
+        the algorithm we programmed didn't complete this even for 5 minutes since we called several API and loop twice.
+        We know that this is not feasible, in order to decrease time, We have to decrease the sample volume. But it still
+        cost us 12 seconds when operate this, this is also why it shows slowly when we open the "Symbol" page.
+    </li>
+    <li>
+        We want to find a method to load our huge resources in the back of the program without waiting for users'
+        activation by click, then we can save a lot of time. But this is also the method we are still learning and developing
+    </li>
+</ul>
+
+<hr />
+
+
+
+
+
+<br />
+<h1> Second Self Reflection (Dec 2nd 2018)</h1>
+<p>
+    In the refinded procject, we tried to develop more Stock Picking Strategies, change page function distribution and 
+    page layout to simplify the user's adaptation difficulty, improve the response speed of some pages to improve user's 
+    experience.
+</p>
+<h2>What we did?</h2>
+<ul>
+    <li>
+        <b>UI design</b>. We combined the original "symbol" page and "chart" page to be a "stocks" page. Put the stock list 
+        and stock chart display into a same page makes it more convenient for users to evaluate stocks intuitively.
+    </li>
+    <li>
+        <b>New logic layer</b>. In the previous version, users can view infomation of each stock to decide whether to add current
+        stock into their repository. Or user can automatically add 5 stocks into their repository by clicking on the recommended stock.
+        In this version, after users click recommendation stock button, app will jump to a new page where 5 stocks display, and 
+        user can decide whether to add each one of them into their repository.
+    </li>
+    <li>
+        <b>New stock picking strategy</b>. On the basis of original Financial Status picking strategy, we developed a new CAPM strategy, which
+        can measure the quality of stocks more quantitatively and accurately.
+    </li>
+    <li>
+        <b>Improve response speed</b>. In the previous version, the "symbol" page took a long time to open. In order to improving
+        this issue, we stored new data in the dataset where the page can directly calls the data, and encapsulate the stocks
+        updating function into a "update" button in the same page. At the same time we also tried to control the database to 
+        update the data daily, without the need for the user to activate the corresponding.
+    </li>
+</ul>
+
+<h2>What we learned?</h2>
+<p>
+    The hardest part is solving the speed issue. In the web development, the back end problem is harder to solve than the
+    front end problem. Most of time, the application will not report an error in the debug, but the output result is not
+    what we want. The process in the back end is invisible, we can only use breakpoint debugging on every code to experience
+    the communication process between the application and the database. Very clear logic is essential to solve these
+    invisible problems. A good logical hierarchy and model design can lead to faster and smoother development. Therefore, 
+    before starting to code, it is necessary to spend more time writing drafts to clarify the logic of function interaction.
+</p>
+
+<h2>The defect of the Web App</h2>
+<p>
+    We finished some unfinished work in the previous version, and also solve a part of speed issue. Inevitably, it also has 
+    exposed some new problems.
+</p>
+<ul>
+    <li>
+        In the CAPM strategy, even though we use regression equation to get the beta value, but the beta value is calculated by
+        the past data. If we want to use beta to predict future price, we need to consider change of beta in the future. Therefore,
+        on the basis of CAPM model, consider to build a new Time-Series model, such as ARIMA, to predict future beta is a more 
+        convincing algorithm.
+    </li>
+    <li>
+        The speed issue is alway the biggest issue, even though we move the slowest response algorithm from page open to a button
+        click, clicking button still takes a long time to calculate. We have to solutions: one is making the database update automatically, 
+        without waiting for the user clicking on the button to start the update, the other one is developing more small features 
+        to decentralize computing operations in the slowest algorithm. We still work on both of them.
+    </li>
+</ul>

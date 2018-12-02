@@ -4,8 +4,19 @@
 }
 
 <h2>Stock Lists</h2>
-<a asp-controller="Home" asp-action="UpdateStocks">Update data</a>
-<a id="dbopt" asp-controller="Home" asp-action="PopulateSymbols">Save Data</a>
+<p>
+    These are the 20 stocks we have selected for you today.
+</p>
+<ul>
+    <li>
+        <b>"Update data"</b> can help you get the latest data, and it will take you about 40 seconds, we appreciate your patience
+    </li>
+    <li>
+        After Update data, please save them by clicking <b>"Save data"</b> Thank you!
+    </li>
+</ul>
+<a style="display:inline-block; margin:0px 10px" asp-controller="Home" asp-action="UpdateStocks">Update data </a>
+<a id="dbopt" asp-controller="Home" asp-action="PopulateSymbols"> Save Data</a>
 <hr />
 @*<a id="dbopt" asp-controller="Home" asp-action="PopulateSymbols"><img src="~/images/button_save-data.png" /></a>*@
 <div id="expand" style="height:190px; overflow:hidden;">
@@ -53,7 +64,9 @@
 
 <hr />
 
+
 <h2 style="margin-top:20px">Stock Charts</h2>
+<p>Please choose one of stocks that you are interested, we will provide more charts for you.</p>
 <form asp-controller="Home" asp-action="Details" method="get">
     <select name="symbol">
         @foreach (var company in Model.Companies)
@@ -63,6 +76,9 @@
     </select>
     <input type="submit" value="Get Details" />
 </form>
+<p>If you like current stock, please click <b>"Add To My Repository"</b> and you can check it in <b>"My Repository"</b> page. <br /> 
+We offer two Stock Picking Recommendations, if you are confused, please check the difference and details 
+between them in the <b>"Home"</b> page. Thank you!</p>
 @if (Model.Current != null)
 {
     var equity = Model.Current;
@@ -103,8 +119,8 @@
                 <td>
                     @*<a asp-controller="Home" asp-action="SaveCharts" asp-route-symbol="@Model.Current.symbol">Save Chart Data</a> <br /><br />*@
                     <a asp-controller="Home" asp-action="AddRepository" asp-route-symbol="@Model.Current.symbol">Add To My Repository</a> <br /><br />
-                    <a asp-controller="Home" asp-action="StockRecommendation">Stock Recommendation</a>
-                    <a asp-controller="Home" asp-action="CAPMrecommendation">Recommendation2</a>
+                    <a asp-controller="Home" asp-action="StockRecommendation">Financial Recommendation</a> <br /><br />
+                    <a asp-controller="Home" asp-action="CAPMrecommendation">CAPM Recommendation</a>
                 </td>
             </tr>
         </tbody>

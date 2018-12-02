@@ -3,16 +3,11 @@
     ViewData["Title"] = "Stock Recommendation";
 }
 <h2>Stock Recommendation</h2>
+<p>
+    These are the 5 best stocks we recommend to you.
+</p>
+
 <hr />
-@*<form asp-controller="Home" asp-action="Chart" method="get">
-    <select name="symbol">
-        @foreach (var company in Model.Companies)
-        {
-            <option value=@company.symbol selected>@company.name</option>
-        }
-    </select>
-    <input type="submit" value="Get Chart" />
-</form>*@
 <table class="table">
     <thead>
         <tr>
@@ -60,7 +55,7 @@
 
 
 
-@if (Model.Current != null)
+@*@if (Model.Current != null)
 {
     var equity = Model.Current;
     <hr />
@@ -114,4 +109,4 @@
 </script>
 <script>
         getStockChart("@Model.Open", "@Model.High", "@Model.Low", "@Model.Close", "@Model.Dates");
-</script>
+</script>*@

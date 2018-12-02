@@ -63,20 +63,20 @@ namespace MVCTemplate.Controllers
             return View(companiesEquities);
         }
 
-        ///****
-        // * The Refresh action calls the ClearTables method to delete records from a or all tables.
-        // * Count of current records for each table is passed to the Refresh View.
-        //****/
-        //public IActionResult Refresh(string tableToDel)
-        //{
-        //    ClearTables(tableToDel);
-        //    Dictionary<string, int> tableCount = new Dictionary<string, int>
-        //    {
-        //        { "Companies", dbContext.Companies.Count() },
-        //        { "Charts", dbContext.Equities.Count() }
-        //    };
-        //    return View(tableCount);
-        //}
+        /****
+         * The Refresh action calls the ClearTables method to delete records from a or all tables.
+         * Count of current records for each table is passed to the Refresh View.
+        ****/
+        public IActionResult Refresh(string tableToDel)
+        {
+            ClearTables(tableToDel);
+            Dictionary<string, int> tableCount = new Dictionary<string, int>
+            {
+                { "Companies", dbContext.Companies.Count() },
+                { "Charts", dbContext.Equities.Count() }
+            };
+            return View(tableCount);
+        }
 
         /****
          * Saves the Symbols in database.
@@ -176,6 +176,9 @@ namespace MVCTemplate.Controllers
             return new CompaniesEquities(companies, equities.Last(), dates, prices, volumes, avgprice, avgvol, open, high, low, close);
         }
 
+
+
+
         //TODO: Unfinished!!!
         public Recommendation GetRecommendationModel(List<Company> companies)
         {
@@ -196,7 +199,6 @@ namespace MVCTemplate.Controllers
 
             return new Recommendation(companies, chart, date);
         }
-
 
         //Update the companies
         public IActionResult UpdateStocks() 
@@ -242,6 +244,7 @@ namespace MVCTemplate.Controllers
             return View();
         }
 
+        //clear my repository record
         public void ClearRecord(string recordToDel)
         {
             if (recordToDel != null)
@@ -281,6 +284,7 @@ namespace MVCTemplate.Controllers
         {
             //CLEAR RECORD
             ClearRecord(recordToDel);
+            ViewBag.dbSuccessRep = 0;
             //the data post to page
             List<Repository> repositories = dbContext.Repositories.ToList();
             return View(repositories);
@@ -371,7 +375,7 @@ namespace MVCTemplate.Controllers
             return View("Recommendation", companiesEquities);
         }
 
-        //Get Asset Return from a certain stock
+        //CAPM: Get Asset Return from a certain stock
         //Market Return from S&P 500 is when symbol equals to "SPY"
         public List<float> GetAssetReturns(string symbol)
         {
@@ -389,7 +393,7 @@ namespace MVCTemplate.Controllers
             return assetReturns;
         }
 
-        //Get Beta Value of a certain stock
+        //CAPM: Get Beta Value of a certain stock
         //Use linear regression model
         public float GetBetaValue(string symbol)
         {
